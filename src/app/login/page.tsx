@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -11,7 +10,6 @@ export default function LoginPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +35,7 @@ export default function LoginPage() {
         setError(data.error || 'Login failed');
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch {
       setError('An error occurred. Please try again.');
       setIsLoading(false);
     }

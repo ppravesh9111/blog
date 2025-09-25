@@ -106,7 +106,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Edit Post</h1>
         <p className="text-gray-600">
-          Update your blog post. Make your changes and click save when you're ready.
+          Update your blog post. Make your changes and click save when you&apos;re ready.
         </p>
       </div>
 
