@@ -19,6 +19,9 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 }
 
 export function generateToken(user: AuthUser): string {
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not configured');
+  }
   return jwt.sign(user, JWT_SECRET, { expiresIn: '24h' });
 }
 

@@ -51,7 +51,7 @@ export function getPostBySlug(slug: string): Post | null {
       content,
       published: data.published !== false,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }

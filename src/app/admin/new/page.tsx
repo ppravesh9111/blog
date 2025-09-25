@@ -63,7 +63,7 @@ export default function NewPostPage() {
         
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Write New Post</h1>
         <p className="text-gray-600">
-          Create a new blog post. Fill in the details below and click save when you're ready.
+          Create a new blog post. Fill in the details below and click save when you&apos;re ready.
         </p>
       </div>
 
