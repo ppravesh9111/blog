@@ -27,15 +27,17 @@ export function generateToken(user: AuthUser): string {
 
 export function verifyToken(token: string): AuthUser | null {
   try {
-    // For middleware (Edge Runtime), we'll do a simple check
-    // In production, you might want to use a different approach
+    if (!JWT_SECRET) {
+      throw new Error('JWT_SECRET is not configured');
+    }
+    
     if (!token || token.length < 10) {
       return null;
     }
     
-    // Simple validation - in a real app, you'd want more robust verification
-    // For now, we'll just check if the token exists and has a reasonable length
-    return { id: '1', username: ADMIN_USERNAME };
+    // Properly verify the JWT token
+    const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;
+    return decoded;
   } catch (error) {
     console.log('Token verification error:', error);
     return null;
