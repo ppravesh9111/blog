@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyTokenEdge } from '@/lib/auth-edge';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   console.log('Middleware triggered for:', pathname);
@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
     }
     
     // Verify the token
-    const user = verifyToken(token);
+    const user = await verifyTokenEdge(token);
     if (!user) {
       // Token is invalid, redirect to login
       if (isAdminRoute) {
