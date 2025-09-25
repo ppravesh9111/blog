@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Custom prose styles for blog content */
+.prose {
+  @apply text-gray-700 leading-relaxed;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold text-gray-900 mb-6 mt-8;
+}
+
+.prose h2 {
+  @apply text-2xl font-semibold text-gray-900 mb-4 mt-6;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold text-gray-900 mb-3 mt-5;
+}
+
+.prose h4 {
+  @apply text-lg font-semibold text-gray-900 mb-2 mt-4;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose ul {
+  @apply mb-4 pl-6;
+}
+
+.prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-blue-200 pl-4 italic text-gray-600 my-6;
+}
+
+.prose code {
+  @apply bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm font-mono;
+}
+
+.prose pre {
+  @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-6;
+}
+
+.prose pre code {
+  @apply bg-transparent text-gray-100 p-0;
+}
+
+.prose a {
+  @apply text-blue-600 hover:text-blue-800 underline;
+}
+
+.prose strong {
+  @apply font-semibold text-gray-900;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose hr {
+  @apply border-gray-200 my-8;
+}
+
+.prose table {
+  @apply w-full border-collapse border border-gray-300 my-6;
+}
+
+.prose th {
+  @apply border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border border-gray-300 px-4 py-2;
+}
