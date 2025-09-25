@@ -58,7 +58,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
     };
 
     checkAuthAndFetchPost();
-  }, [resolvedParams.slug]);
+  }, [resolvedParams.slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
