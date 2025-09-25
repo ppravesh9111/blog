@@ -21,10 +21,23 @@ export default function EditPostPage({ params }: EditPostPageProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const checkAuthAndFetchPost = async () => {
       try {
+        // First check authentication
+        const authResponse = await fetch('/api/auth/me');
+        if (authResponse.status === 401) {
+          router.push('/login');
+          return;
+        }
+        
+        if (authResponse.ok) {
+          setAuthenticated(true);
+        }
+        
+        // Then fetch the post
         const response = await fetch(`/api/posts/${resolvedParams.slug}`);
         if (response.ok) {
           const post = await response.json();
@@ -44,7 +57,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
       }
     };
 
-    fetchPost();
+    checkAuthAndFetchPost();
   }, [resolvedParams.slug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,7 +95,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
     }));
   };
 
-  if (loading) {
+  if (loading || !authenticated) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">

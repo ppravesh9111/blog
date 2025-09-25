@@ -8,29 +8,47 @@ import { useRouter } from 'next/navigation';
 export default function AdminPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState<{ username: string } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const checkAuthAndFetchPosts = async () => {
       try {
-        const response = await fetch('/api/posts');
-        if (response.ok) {
-          const allPosts = await response.json();
-          setPosts(allPosts);
+        // First check if we're authenticated
+        const authResponse = await fetch('/api/auth/me');
+        if (authResponse.status === 401) {
+          // Not authenticated, redirect to login
+          router.push('/login');
+          return;
+        }
+        
+        if (authResponse.ok) {
+          const authData = await authResponse.json();
+          setUser(authData.user);
+          setAuthenticated(true);
+          
+          // Now fetch posts
+          const postsResponse = await fetch('/api/posts');
+          if (postsResponse.ok) {
+            const allPosts = await postsResponse.json();
+            setPosts(allPosts);
+          } else {
+            console.error('Failed to fetch posts');
+          }
         } else {
-          console.error('Failed to fetch posts');
+          console.error('Failed to authenticate');
+          router.push('/login');
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Error checking auth or fetching posts:', error);
+        router.push('/login');
       } finally {
         setLoading(false);
       }
     };
 
-    // Set user info (in a real app, you'd get this from the token)
-    setUser({ username: 'admin' });
-    fetchPosts();
+    checkAuthAndFetchPosts();
   }, []);
 
   const handleLogout = async () => {
@@ -69,7 +87,7 @@ export default function AdminPage() {
     }
   };
 
-  if (loading) {
+  if (loading || !authenticated) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">

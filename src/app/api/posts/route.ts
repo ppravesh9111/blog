@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllPosts } from '@/lib/posts';
+import { verifyToken } from '@/lib/auth';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,6 +16,17 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const token = request.cookies.get('auth-token')?.value;
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    const user = verifyToken(token);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const { title, excerpt, content, published } = await request.json();
 
     if (!title || !content) {
