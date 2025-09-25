@@ -49,7 +49,7 @@ export default function AdminPage() {
     };
 
     checkAuthAndFetchPosts();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLogout = async () => {
     try {
