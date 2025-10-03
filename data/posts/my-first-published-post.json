@@ -1,0 +1,8 @@
+{
+  "slug": "my-first-published-post",
+  "title": "My First Published Post",
+  "date": "2025-09-25",
+  "excerpt": "This is a test post to verify the draft system works correctly.",
+  "content": "# Welcome to My Blog\n\nThis is my first published post! I can write in **Markdown** and it will be rendered beautifully.\n\n## Features\n\n- Draft system works\n- Posts can be published\n- Markdown support\n\nThanks for reading!",
+  "published": true
+}

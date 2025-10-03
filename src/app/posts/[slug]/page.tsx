@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllPostSlugs } from '@/lib/posts';
 import { format } from 'date-fns';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import { use } from 'react';
 
 interface PostPageProps {
   params: Promise<{
@@ -11,15 +10,15 @@ interface PostPageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllPostSlugs();
+  const slugs = await getAllPostSlugs();
   return slugs.map((slug) => ({
     slug,
   }));
 }
 
-export default function PostPage({ params }: PostPageProps) {
-  const resolvedParams = use(params);
-  const post = getPostBySlug(resolvedParams.slug);
+export default async function PostPage({ params }: PostPageProps) {
+  const resolvedParams = await params;
+  const post = await getPostBySlug(resolvedParams.slug);
 
   if (!post) {
     notFound();
