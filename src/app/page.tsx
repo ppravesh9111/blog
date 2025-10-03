@@ -1,9 +1,8 @@
 import { getAllPosts } from '@/lib/posts';
 import PostCard from '@/components/PostCard';
 
-export default function Home() {
-  const allPosts = getAllPosts();
-  const posts = allPosts.filter(post => post.published);
+export default async function Home() {
+  const posts = await getAllPosts();
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

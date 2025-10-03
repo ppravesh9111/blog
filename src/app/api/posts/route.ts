@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllPosts } from '@/lib/posts';
+import { getAllPostsIncludingDrafts, createPost } from '@/lib/posts';
 import { verifyToken } from '@/lib/auth';
-import fs from 'fs';
-import path from 'path';
 
 export async function GET() {
   try {
-    const posts = getAllPosts();
+    const posts = await getAllPostsIncludingDrafts();
     return NextResponse.json(posts);
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -33,32 +31,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }
 
-    // Create slug from title
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
-
-    // Create the MDX content with frontmatter
-    const mdxContent = `---
-title: "${title}"
-excerpt: "${excerpt || ''}"
-date: "${new Date().toISOString().split('T')[0]}"
-published: ${published}
----
-
-${content}`;
-
-    // Write the file
-    const postsDir = path.join(process.cwd(), 'src/posts');
-    const filePath = path.join(postsDir, `${slug}.mdx`);
-    
-    // Ensure posts directory exists
-    if (!fs.existsSync(postsDir)) {
-      fs.mkdirSync(postsDir, { recursive: true });
-    }
-
-    fs.writeFileSync(filePath, mdxContent);
+    const slug = await createPost({
+      title,
+      excerpt: excerpt || '',
+      content,
+      published: published || false,
+    });
 
     return NextResponse.json({ success: true, slug });
   } catch (error) {

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPostBySlug } from '@/lib/posts';
+import { getPostBySlug, updatePost, deletePost } from '@/lib/posts';
 import { verifyToken } from '@/lib/auth';
-import fs from 'fs';
-import path from 'path';
 
 export async function GET(
   request: Request,
@@ -10,7 +8,7 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    const post = getPostBySlug(resolvedParams.slug);
+    const post = await getPostBySlug(resolvedParams.slug);
     
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -46,26 +44,21 @@ export async function PUT(
       return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }
 
-    // Create the MDX content with frontmatter
-    const mdxContent = `---
-title: "${title}"
-excerpt: "${excerpt || ''}"
-date: "${new Date().toISOString().split('T')[0]}"
-published: ${published}
----
-
-${content}`;
-
-    // Write the file
-    const postsDir = path.join(process.cwd(), 'src/posts');
-    const filePath = path.join(postsDir, `${resolvedParams.slug}.mdx`);
-    
-    // Ensure posts directory exists
-    if (!fs.existsSync(postsDir)) {
-      fs.mkdirSync(postsDir, { recursive: true });
+    // Get the existing post to preserve the date
+    const existingPost = await getPostBySlug(resolvedParams.slug);
+    if (!existingPost) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    fs.writeFileSync(filePath, mdxContent);
+    const updatedPost = {
+      ...existingPost,
+      title,
+      excerpt: excerpt || '',
+      content,
+      published: published || false,
+    };
+
+    await updatePost(updatedPost);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -91,16 +84,14 @@ export async function DELETE(
     }
     
     const resolvedParams = await params;
-    const postsDir = path.join(process.cwd(), 'src/posts');
-    const filePath = path.join(postsDir, `${resolvedParams.slug}.mdx`);
     
-    // Check if file exists
-    if (!fs.existsSync(filePath)) {
+    // Check if post exists
+    const existingPost = await getPostBySlug(resolvedParams.slug);
+    if (!existingPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
     
-    // Delete the file
-    fs.unlinkSync(filePath);
+    await deletePost(resolvedParams.slug);
     
     return NextResponse.json({ success: true });
   } catch (error) {

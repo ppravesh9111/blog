@@ -33,6 +33,9 @@ Your password is stored in `.env.local` which is:
      ```
      ADMIN_PASSWORD=your-secure-password-here
      JWT_SECRET=your-jwt-secret-here
+     GITHUB_TOKEN=your-github-token-here
+     GITHUB_REPO_OWNER=your-github-username
+     GITHUB_REPO_NAME=blog
      ```
    - Redeploy your site
 
@@ -48,7 +51,14 @@ Your password is stored in `.env.local` which is:
 
 3. **Set Environment Variables:**
    - Go to Site Settings → Environment Variables
-   - Add the same variables as above
+   - Add the same variables as above:
+     ```
+     ADMIN_PASSWORD=your-secure-password-here
+     JWT_SECRET=your-jwt-secret-here
+     GITHUB_TOKEN=your-github-token-here
+     GITHUB_REPO_OWNER=your-github-username
+     GITHUB_REPO_NAME=blog
+     ```
 
 ## 🔒 Security Checklist
 
@@ -74,6 +84,13 @@ Your password is stored in `.env.local` which is:
 3. **Never Share**: Keep your `.env.local` file private
 4. **Production Secrets**: Use strong, unique passwords for production
 
+## 🔧 GitHub Storage Setup
+
+Your blog now uses GitHub as a free database! See `GITHUB-SETUP.md` for detailed instructions on:
+- Creating a GitHub Personal Access Token
+- Setting up environment variables
+- Migrating existing posts
+
 ## 🎉 You're Secure!
 
 Your blog is now:
@@ -81,3 +98,4 @@ Your blog is now:
 - ✅ Safe for GitHub
 - ✅ Ready for deployment
 - ✅ Production ready
+- ✅ Uses free GitHub storage (no database costs!)

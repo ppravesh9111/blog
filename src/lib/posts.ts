@@ -1,8 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-
-const postsDirectory = path.join(process.cwd(), 'src/posts');
+import { githubStorage } from './github-storage';
 
 export interface Post {
   slug: string;
@@ -13,52 +9,65 @@ export interface Post {
   published: boolean;
 }
 
-export function getAllPosts(): Post[] {
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx$/, '');
-      const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data, content } = matter(fileContents);
-
-      return {
-        slug,
-        title: data.title,
-        date: data.date,
-        excerpt: data.excerpt || '',
-        content,
-        published: data.published !== false,
-      };
-    });
-
-  return allPostsData
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+export async function getAllPosts(): Promise<Post[]> {
+  try {
+    const posts = await githubStorage.getAllPosts();
+    return posts.filter(post => post.published);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
 }
 
-export function getPostBySlug(slug: string): Post | null {
+export async function getAllPostsIncludingDrafts(): Promise<Post[]> {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
+    return await githubStorage.getAllPosts();
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+}
 
-    return {
-      slug,
-      title: data.title,
-      date: data.date,
-      excerpt: data.excerpt || '',
-      content,
-      published: data.published !== false,
-    };
-  } catch {
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  try {
+    return await githubStorage.getPostBySlug(slug);
+  } catch (error) {
+    console.error('Error fetching post:', error);
     return null;
   }
 }
 
-export function getAllPostSlugs(): string[] {
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => fileName.replace(/\.mdx$/, ''));
+export async function getAllPostSlugs(): Promise<string[]> {
+  try {
+    const posts = await githubStorage.getAllPosts();
+    return posts.map(post => post.slug);
+  } catch (error) {
+    console.error('Error fetching post slugs:', error);
+    return [];
+  }
+}
+
+export async function createPost(postData: Omit<Post, 'slug' | 'date'>): Promise<string> {
+  // Create slug from title
+  const slug = postData.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+  const post: Post = {
+    ...postData,
+    slug,
+    date: new Date().toISOString().split('T')[0],
+  };
+
+  await githubStorage.createPost(post);
+  return slug;
+}
+
+export async function updatePost(post: Post): Promise<void> {
+  await githubStorage.updatePost(post);
+}
+
+export async function deletePost(slug: string): Promise<void> {
+  await githubStorage.deletePost(slug);
 }
