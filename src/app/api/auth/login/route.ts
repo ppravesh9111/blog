@@ -16,13 +16,12 @@ export async function POST(request: NextRequest) {
 
     if (result.success && result.token) {
       const response = NextResponse.json(result);
-      
-      // Set the auth token as an HTTP-only cookie
+
       response.cookies.set('auth-token', result.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 86400, // 24 hours
+        maxAge: 86400,
         path: '/',
       });
 

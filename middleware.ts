@@ -8,7 +8,9 @@ export async function middleware(request: NextRequest) {
   
   // Check if the request is for admin routes or API routes that need authentication
   const isAdminRoute = pathname.startsWith('/admin');
-  const isProtectedApiRoute = pathname.startsWith('/api/posts') && request.method !== 'GET';
+  const isProtectedApiRoute =
+    (pathname.startsWith('/api/posts') && request.method !== 'GET') ||
+    (pathname.startsWith('/api/tweets') && request.method !== 'GET');
   
   if (isAdminRoute || isProtectedApiRoute) {
     const token = request.cookies.get('auth-token')?.value;
@@ -40,6 +42,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/api/posts/:path*'
+    '/api/posts/:path*',
+    '/api/tweets/:path*'
   ]
 };

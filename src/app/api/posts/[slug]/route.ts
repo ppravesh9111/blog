@@ -9,11 +9,11 @@ export async function GET(
   try {
     const resolvedParams = await params;
     const post = await getPostBySlug(resolvedParams.slug);
-    
+
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
-    
+
     return NextResponse.json(post);
   } catch (error) {
     console.error('Error fetching post:', error);
@@ -26,17 +26,16 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
     const token = request.cookies.get('auth-token')?.value;
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
-    const user = verifyToken(token);
+
+    const user = await verifyToken(token);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const resolvedParams = await params;
     const { title, excerpt, content, published } = await request.json();
 
@@ -44,7 +43,6 @@ export async function PUT(
       return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }
 
-    // Get the existing post to preserve the date
     const existingPost = await getPostBySlug(resolvedParams.slug);
     if (!existingPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -72,27 +70,25 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
     const token = request.cookies.get('auth-token')?.value;
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
-    const user = verifyToken(token);
+
+    const user = await verifyToken(token);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const resolvedParams = await params;
-    
-    // Check if post exists
+
     const existingPost = await getPostBySlug(resolvedParams.slug);
     if (!existingPost) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
-    
+
     await deletePost(resolvedParams.slug);
-    
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting post:', error);

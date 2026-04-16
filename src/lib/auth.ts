@@ -1,5 +1,4 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
@@ -10,53 +9,61 @@ export interface AuthUser {
   username: string;
 }
 
-export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 10);
-}
-
-export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
-  return bcrypt.compare(password, hashedPassword);
-}
-
-export function generateToken(user: AuthUser): string {
+function getSecretKey() {
   if (!JWT_SECRET) {
     throw new Error('JWT_SECRET is not configured');
   }
-  return jwt.sign(user, JWT_SECRET, { expiresIn: '24h' });
+  return new TextEncoder().encode(JWT_SECRET);
 }
 
-export function verifyToken(token: string): AuthUser | null {
+// Constant-time string comparison to prevent timing attacks
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  const encoder = new TextEncoder();
+  const bufA = encoder.encode(a);
+  const bufB = encoder.encode(b);
+  let result = 0;
+  for (let i = 0; i < bufA.length; i++) {
+    result |= bufA[i] ^ bufB[i];
+  }
+  return result === 0;
+}
+
+export async function generateToken(user: AuthUser): Promise<string> {
+  return new SignJWT({ id: user.id, username: user.username })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime('24h')
+    .sign(getSecretKey());
+}
+
+export async function verifyToken(token: string): Promise<AuthUser | null> {
   try {
-    if (!JWT_SECRET) {
-      throw new Error('JWT_SECRET is not configured');
-    }
-    
     if (!token || token.length < 10) {
       return null;
     }
-    
-    // Properly verify the JWT token
-    const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;
-    return decoded;
-  } catch (error) {
-    console.log('Token verification error:', error);
+    const { payload } = await jwtVerify(token, getSecretKey());
+    return {
+      id: payload.id as string,
+      username: payload.username as string,
+    };
+  } catch {
     return null;
   }
 }
 
-export async function authenticateUser(username: string, password: string): Promise<{ success: boolean; token?: string; error?: string }> {
-  // Check if environment variables are set
+export async function authenticateUser(
+  username: string,
+  password: string
+): Promise<{ success: boolean; token?: string; error?: string }> {
   if (!JWT_SECRET || !ADMIN_PASSWORD) {
     return { success: false, error: 'Server configuration error. Please contact administrator.' };
   }
-  
-  // For simplicity, we'll use a single admin user
-  // In production, you might want to store this in a database
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+
+  if (timingSafeEqual(username, ADMIN_USERNAME) && timingSafeEqual(password, ADMIN_PASSWORD)) {
     const user: AuthUser = { id: '1', username: ADMIN_USERNAME };
-    const token = generateToken(user);
+    const token = await generateToken(user);
     return { success: true, token };
   }
-  
+
   return { success: false, error: 'Invalid credentials' };
 }

@@ -30,7 +30,7 @@ export default function LoginPage() {
       if (data.success) {
         // The token is already set as an HTTP-only cookie by the server
         // Use window.location for a full page redirect to ensure middleware runs
-        window.location.href = '/admin';
+        window.location.href = '/';
       } else {
         setError(data.error || 'Login failed');
         setIsLoading(false);

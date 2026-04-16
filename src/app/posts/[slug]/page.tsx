@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllPostSlugs } from '@/lib/posts';
 import { format } from 'date-fns';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import type { Metadata } from 'next';
 
 interface PostPageProps {
   params: Promise<{
@@ -14,6 +15,20 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({
     slug,
   }));
+}
+
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const post = await getPostBySlug(resolvedParams.slug);
+
+  if (!post) {
+    return { title: 'Post Not Found' };
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt || post.content.slice(0, 160).replace(/\n/g, ' '),
+  };
 }
 
 export default async function PostPage({ params }: PostPageProps) {
@@ -30,13 +45,13 @@ export default async function PostPage({ params }: PostPageProps) {
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           {post.title}
         </h1>
-        
+
         <div className="flex items-center text-gray-600 mb-6">
           <time className="text-lg">
             {format(new Date(post.date), 'MMMM dd, yyyy')}
           </time>
         </div>
-        
+
         {post.excerpt && (
           <p className="text-xl text-gray-600 leading-relaxed">
             {post.excerpt}
