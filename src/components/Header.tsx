@@ -16,33 +16,33 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b">
+    <header className="bg-white dark:bg-gray-900 shadow-sm border-b dark:border-gray-800">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-6">
           <div>
-            <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+            <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Purnendu Sharma
             </Link>
-            <p className="text-gray-600 mt-1">Thoughts, experiences, and insights</p>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Thoughts, experiences, and insights</p>
           </div>
 
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
               Blog
             </Link>
             <Link
               href="/tweets"
-              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
               Tweets
             </Link>
             {loggedIn && (
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-red-600 transition-colors font-medium"
+                className="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors font-medium"
               >
                 Logout
               </button>
@@ -53,7 +53,7 @@ export default function Header() {
           <div className="md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (
@@ -68,25 +68,25 @@ export default function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 border-t border-gray-100 pt-4 space-y-3">
+          <nav className="md:hidden pb-4 border-t border-gray-100 dark:border-gray-800 pt-4 space-y-3">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              className="block text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
               Blog
             </Link>
             <Link
               href="/tweets"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              className="block text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
               Tweets
             </Link>
             {loggedIn && (
               <button
                 onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
-                className="block text-gray-600 hover:text-red-600 transition-colors font-medium"
+                className="block text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors font-medium"
               >
                 Logout
               </button>

@@ -111,23 +111,23 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         <div className="flex items-center gap-4 mb-6">
           <Link
             href="/admin"
-            className="text-gray-600 hover:text-gray-800 font-medium"
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium"
           >
             ← Back to Admin
           </Link>
         </div>
-        
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Edit Post</h1>
-        <p className="text-gray-600">
+
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Edit Post</h1>
+        <p className="text-gray-600 dark:text-gray-400">
           Update your blog post. Make your changes and click save when you&apos;re ready.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6">
           <div className="space-y-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Title *
               </label>
               <input
@@ -137,13 +137,13 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter post title..."
               />
             </div>
 
             <div>
-              <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Excerpt
               </label>
               <textarea
@@ -152,13 +152,13 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                 value={formData.excerpt}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Brief description of your post..."
               />
             </div>
 
             <div>
-              <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Content *
               </label>
               <textarea
@@ -168,10 +168,10 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                 onChange={handleChange}
                 required
                 rows={20}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
                 placeholder="Write your post content in Markdown..."
               />
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 You can use Markdown formatting. For example: **bold**, *italic*, # headings, etc.
               </p>
             </div>
@@ -185,7 +185,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                 onChange={handleChange}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <label htmlFor="published" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="published" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                 Publish immediately
               </label>
             </div>
@@ -195,7 +195,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         <div className="flex justify-end gap-4">
           <Link
             href="/admin"
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            className="px-6 py-3 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
           >
             Cancel
           </Link>

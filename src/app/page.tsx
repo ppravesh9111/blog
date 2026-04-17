@@ -51,10 +51,10 @@ export default function Home() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
           Welcome to My Blog
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           A place where I share my thoughts, experiences, and insights on technology,
           personal growth, and life in general.
         </p>
@@ -78,29 +78,29 @@ export default function Home() {
         </div>
       ) : (
         <div className="space-y-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Latest Posts</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Latest Posts</h2>
           <div className="grid gap-8">
             {posts.map((post) => (
-              <article key={post.slug} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6">
+              <article key={post.slug} className="bg-white dark:bg-gray-900 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6">
                 <div className="mb-4 flex items-center gap-2">
-                  <time className="text-sm text-gray-500">
+                  <time className="text-sm text-gray-500 dark:text-gray-400">
                     {format(new Date(post.date), 'MMMM dd, yyyy')}
                   </time>
                   {!post.published && (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
                       Draft
                     </span>
                   )}
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                   <Link href={`/posts/${post.slug}`}>
                     {post.title}
                   </Link>
                 </h2>
 
                 {post.excerpt && (
-                  <p className="text-gray-600 mb-4 leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
                     {post.excerpt}
                   </p>
                 )}
@@ -108,7 +108,7 @@ export default function Home() {
                 <div className="flex items-center gap-4">
                   <Link
                     href={`/posts/${post.slug}`}
-                    className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
                   >
                     Read more
                     <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,13 +119,13 @@ export default function Home() {
                     <>
                       <Link
                         href={`/admin/edit/${post.slug}`}
-                        className="text-gray-400 hover:text-gray-600 text-sm font-medium transition-colors"
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm font-medium transition-colors"
                       >
                         Edit
                       </Link>
                       <button
                         onClick={() => handleDelete(post.slug, post.title)}
-                        className="text-red-400 hover:text-red-600 text-sm font-medium transition-colors"
+                        className="text-red-400 hover:text-red-600 dark:hover:text-red-300 text-sm font-medium transition-colors"
                       >
                         Delete
                       </button>

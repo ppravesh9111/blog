@@ -42,18 +42,18 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
           {post.title}
         </h1>
 
-        <div className="flex items-center text-gray-600 mb-6">
+        <div className="flex items-center text-gray-600 dark:text-gray-400 mb-6">
           <time className="text-lg">
             {format(new Date(post.date), 'MMMM dd, yyyy')}
           </time>
         </div>
 
         {post.excerpt && (
-          <p className="text-xl text-gray-600 leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
             {post.excerpt}
           </p>
         )}

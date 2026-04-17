@@ -59,18 +59,18 @@ export default function TweetsPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
       <div className="mb-10">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Tweets</h1>
-        <p className="text-gray-500">Quick thoughts, random musings, unfiltered.</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Tweets</h1>
+        <p className="text-gray-500 dark:text-gray-400">Quick thoughts, random musings, unfiltered.</p>
       </div>
 
       {/* Compose box — only visible when logged in */}
       {loggedIn && (
-        <div className="mb-8 bg-white rounded-lg shadow p-5">
+        <div className="mb-8 bg-white dark:bg-gray-900 rounded-lg shadow p-5">
           <textarea
             value={tweetContent}
             onChange={(e) => setTweetContent(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             placeholder="What's on your mind?"
           />
           <div className="flex items-center justify-between mt-3">
@@ -99,25 +99,25 @@ export default function TweetsPage() {
       ) : (
         <div className="space-y-0">
           {tweets.map((tweet) => (
-            <div key={tweet.id} className="border-b border-gray-200 py-5">
+            <div key={tweet.id} className="border-b border-gray-200 dark:border-gray-800 py-5">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#FF9933] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                   PS
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold text-gray-900 text-sm">Purnendu Sharma</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Purnendu Sharma</span>
                     <span className="text-gray-400 text-sm">
                       &middot; {formatDistanceToNow(new Date(tweet.date), { addSuffix: true })}
                     </span>
                   </div>
-                  <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
                     {tweet.content}
                   </p>
                   {loggedIn && (
                     <button
                       onClick={() => handleDelete(tweet.id)}
-                      className="text-red-400 hover:text-red-600 text-xs mt-2 transition-colors"
+                      className="text-red-400 hover:text-red-600 dark:hover:text-red-300 text-xs mt-2 transition-colors"
                     >
                       Delete
                     </button>
