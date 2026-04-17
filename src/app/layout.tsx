@@ -18,9 +18,8 @@ const geistMono = Geist_Mono({
 const themeScript = `
   (function() {
     var t = localStorage.getItem('theme');
-    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    }
+    if (t === 'light') return;
+    document.documentElement.classList.add('dark');
   })();
 `;
 
